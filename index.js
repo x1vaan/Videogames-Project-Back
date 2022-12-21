@@ -17,22 +17,15 @@
 //     =====`-.____`.___ \_____/___.-`___.-'=====
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const { load } = require('dotenv');
+const { load } = require('dotenv').config();
 const { PORT } = process.env
 const app = require('./src/app.js');
 const { conn } = require('./src/db.js');
 const { loadingvideogames, loadinggenres, loadingdescription, genresforeachgame} = require('./src/loadingpage.js')
 // Syncing all the models at once.
-conn.sync({force : true}).then(async () =>{
-  await loadingvideogames();
-  await loadinggenres();
-}).then(()=> {
-  loadingdescription();
-}).then(() =>{
-  genresforeachgame();
-}).then(() => {
+conn.sync().then(() => {
   app.listen(process.env.PORT, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
+    console.log(`%s listening at ${PORT}`); // eslint-disable-line no-console
   });
 })
 .catch(err => console.log(err))
